@@ -1,0 +1,23 @@
+FROM gcc:latest
+
+WORKDIR /app
+
+COPY . .
+
+# Instalar dependencias (ajusta según tu proyecto)
+RUN apt-get update && apt-get install -y libpthread-stubs0-dev other-dependency
+
+# Instalar sudo
+RUN apt-get install -y sudo
+
+# Crear usuario con privilegios de sudo
+RUN useradd -m -G sudo -s /bin/bash myuser
+USER myuser
+
+# Ejecutar cmake, make y make install con sudo
+RUN cmake -DCMAKE_INSTALL_PREFIX=/usr && \
+    make && \
+    sudo make install
+
+# CMD ajustado a la ruta del ejecutable
+CMD ["/usr/local/bin/mi_aplicacion"] # Ajusta la ruta si es necesario
